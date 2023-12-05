@@ -24,6 +24,7 @@ class _LoginState extends State<Login> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   bool isLoading = false;
+  var _auth=FirebaseAuth.instance;
 
   signIn() async {
     setState(() {
@@ -31,8 +32,9 @@ class _LoginState extends State<Login> {
     });
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await _auth.signInWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
+      print('done');
     } on FirebaseAuthException catch (e) {
       showSnackBar(context, "ERROR :  ${e.code} ");
     }
