@@ -41,7 +41,8 @@ class _RegisterState extends State<Register> {
   bool hasUppercase = false;
   bool hasLowercase = false;
   bool hasSpecialCharacters = false;
-
+ //todo new
+  final _auth = FirebaseAuth.instance;
   uploadImage2Screen(ImageSource source) async {
     final pickedImg = await ImagePicker().pickImage(source: source);
     try {
@@ -157,15 +158,14 @@ class _RegisterState extends State<Register> {
     setState(() {
       isLoading = true;
     });
-//todo change data
-    try {
-      final credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: 'mohamed@sabaan.net',
-        password: '#Mm123456789',
+
+   //todo new
+      final credential = await _auth.createUserWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim()
       );
 
-
+//todo Task-1 add on firebase first
 // Upload image to firebase storage
 //       final storageRef = FirebaseStorage.instance.ref("users-imgs/$imgName");
 //       await storageRef.putFile(imgPath!);
@@ -494,18 +494,18 @@ class _RegisterState extends State<Register> {
                   ElevatedButton(
                     onPressed: () async {
                       await register();
-                      // if (_formKey.currentState!.validate() &&
-                      //     imgName != null &&
-                      //     imgPath != null) {
-                      //   await register();
-                      //   if (!mounted) return;
-                      //   Navigator.pushReplacement(
-                      //     context,
-                      //     MaterialPageRoute(builder: (context) => const Login()),
-                      //   );
-                      // } else {
-                      //   showSnackBar(context, "ERROR");
-                      // }
+                       if (_formKey.currentState!.validate() &&
+                          imgName != null &&
+                           imgPath != null) {
+                         await register();
+                         if (!mounted) return;
+                         Navigator.pushReplacement(
+                           context,
+                           MaterialPageRoute(builder: (context) => const Login()),
+                         );
+                       } else {
+                         showSnackBar(context, "ERROR");
+                       }
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(bTNgreen),
